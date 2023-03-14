@@ -6,7 +6,10 @@ const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.utils.parseEther("2")
 
 module.exports = async function ({ getNamedAccounts, deployments }) {
   const { deploy, log } = deployments
-  const deployer = await getNamedAccounts()
+  const { deployer } = await getNamedAccounts()
+  // can use this instead of deployer
+  // let owner = await ethers.getSigners()
+  // log(owner.address)
   let vrfCoordinatorV2Address, subscriptionId
   const chainId = network.config.chainId
 
@@ -58,25 +61,28 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     interval,
   ]
 
-  // seems like it cant be deployed like this anymore
-  // const raffle = await deploy("Raffle", {
-  //   from: deployer,
-  //   args: args,
-  //   log: true,
-  //   waitConfirmations: network.config.blockConfirmations || 1,
-  // })
+  const raffle = await deploy("Raffle", {
+    from: deployer,
+    args: args,
+    log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
+  })
 
-  const Raffle = await ethers.getContractFactory("Raffle")
-  const raffle = await Raffle.deploy(
-    vrfCoordinatorV2Address,
-    entranceFee,
-    gasLane,
-    subscriptionId,
-    callbackGasLimit,
-    interval
-  )
+  // log(deployer)
+  // const Raffle = await ethers.getContractFactory("Raffle")
+  // const raffle = await Raffle.deploy(
+  //   vrfCoordinatorV2Address,
+  //   entranceFee,
+  //   gasLane,
+  //   subscriptionId,
+  //   callbackGasLimit,
+  //   interval
+  // )
+  // await raffle.deployed()
+  // for some reason when deploying contract like this, i can't use deployments.fixture in testing
+  // i assume that doing it the way docks said would work, with creating loadFixture() but i didn't try it
 
-  log("contract deployed:")
+  log("Dployed contract:")
   log(raffle.address)
   // log(raffle)
 

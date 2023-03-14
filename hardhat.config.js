@@ -32,7 +32,7 @@ module.exports = {
       default: 0,
     },
     player: {
-      default: 0,
+      default: 1,
     },
   },
 }

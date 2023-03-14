@@ -20,7 +20,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
           const raffleState = await raffle.getRaffleState()
           const interval = await raffle.getInterval()
           assert.equal(raffleState.toString(), "0")
-          assert.equal(interval.toString, networkConfig[chainId]["interval"])
+          assert.equal(interval.toString(), networkConfig[chainId]["interval"])
         })
       })
     })
