@@ -35,4 +35,18 @@ module.exports = {
       default: 1,
     },
   },
+  gasReporter: {
+    enabled: false,
+    currency: "USD",
+    outputFile: "gas-report.txt",
+    noColors: true,
+    // coinmarketcap: COINMARKETCAP_API_KEY
+  },
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
+  },
+  mocha: {
+    timeout: 500000, //300 seconds, this is automatic, no need to use it in code
+    // timeout for unit testing
+  },
 }

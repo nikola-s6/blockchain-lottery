@@ -1,3 +1,4 @@
+const { id } = require("ethers/lib/utils")
 const { network, ethers, deployments } = require("hardhat")
 const { developmentChains, networkConfig } = require("../helper-hardhat-config")
 const { verify } = require("../utils/verify")
@@ -38,7 +39,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     subscriptionId = trasactionReceipt.events[0].args.subId
 
     // Fund the subscription
-    // Mocks can be funced with other assets than LINK token
+    // Mocks can be funded with other assets than LINK token
     await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUBSCRIPTION_FUND_AMOUNT)
   } else {
     vrfCoordinatorV2Address = networkConfig[chainId]["vrfCoordinatorV2"]
@@ -85,6 +86,14 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
   log("Dployed contract:")
   log(raffle.address)
   // log(raffle)
+
+  if (developmentChains.includes(network.name)) {
+    const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
+    await vrfCoordinatorV2Mock.addConsumer(subscriptionId, raffle.address)
+    log("Deployed contract added as mock consumer")
+    // const data = await vrfCoordinatorV2Mock.getSubscription(subscriptionId)
+    // log(data.consumers)
+  }
 
   if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
     log("------------------------------------------------------------")
